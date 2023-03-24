@@ -8,13 +8,13 @@ if (strlen($_SESSION['alogin']) == 0) {
     header('location:../adminlogin.php');
   } else {
 
-    $sql1 = "SELECT * FROM tblauthors";
-      $query1 = $dbh->prepare($sql1);
+    $sql = "SELECT * FROM tblauthors";
+      $query1 = $dbh->prepare($sql);
       $query1->execute();
       
       
-      $sql2 = "SELECT * FROM tblcategory";
-      $query2 = $dbh -> prepare($sql2);
+      $sql = "SELECT * FROM tblcategory";
+      $query2 = $dbh -> prepare($sql);
       $query2->execute();
       
     if (TRUE === isset($_POST['alogin'])){ 
@@ -87,7 +87,7 @@ if (strlen($_SESSION['alogin']) == 0) {
                                     <label>Categorie</label>
                                     <select name="categorie">
                                         <option value="">Choix de la categorie</option>
-                                    <?php while($result2 = $query2->fetchAll(PDO::FETCH_OBJ)){ ?>
+                                    <?php while($result2 = $query2->fetch(PDO::FETCH_ASSOC)){ ?>
                                         <option value="<?php echo $result2['id']; ?>"><?php echo $result2['CategoryName']; ?></option>
                                         <?php
                                     }?>
@@ -96,8 +96,8 @@ if (strlen($_SESSION['alogin']) == 0) {
                                 <div class="form-group">
                                     <label>Auteur</label>
                                     <select name="auteur">
-                                    <option value="">Choix de l'auteur'</option>
-                                    <?php while($result1 = $query1->fetchAll(PDO::FETCH_OBJ)){ 
+                                    <option value="">Choix de l'auteur</option>
+                                    <?php while($result1 = $query1->fetch(PDO::FETCH_ASSOC)){ 
                                         ?>
                                         
                                         <option value="<?php echo ($result1['id']); ?>"><?php echo ($result1['AuthorName']); ?></option>
