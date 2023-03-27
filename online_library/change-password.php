@@ -76,7 +76,7 @@ if(strlen($_SESSION['login'])==0) {
 	<div class="container">
 		<div class="row">
 			<div class="col">
-				<h3>RECUPERATION DE MOT DE PASSE</h3>
+				<h3>CHANGEMENT DE MOT DE PASSE</h3>
 			</div>
 		</div>     
         <!--On insere le formulaire de recuperation-->

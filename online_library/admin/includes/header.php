@@ -37,7 +37,7 @@
                                     <li role="presentation"><a role="menuitem" tabindex="-1" href="manage-issued-books.php">Gérer les sorties</a></li>
                                 </ul>
           <li class="nav-item">
-              <a class="nav-link" href="index.php">LECTEURS</a>
+              <a class="nav-link" href="reg-readers.php">LECTEURS</a>
           </li>
           <li class="nav-item">
               <a class="nav-link" href="change-password.php">MODIFIER MOT DE PASSE</a>
