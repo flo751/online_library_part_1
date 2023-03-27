@@ -8,6 +8,7 @@ if (strlen($_SESSION['alogin']) == 0) {
     header('location:../adminlogin.php');
   } else {
 
+
     $sql = "SELECT * FROM tblauthors";
       $query1 = $dbh->prepare($sql);
       $query1->execute();

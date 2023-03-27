@@ -11,16 +11,18 @@ if (strlen($_SESSION['alogin']) == 0) {
      $id = $_GET['edit'];
      
      if (isset($_POST['update'])){
-     if(!preg_match("^[A-Za-z '-]*$", $name)){
-         $name = $_POST['name'];
-     $status = $_POST['radio'];
+     
+    $name = $_POST['name'];
+    $status = $_POST['radio'];
+    if(!preg_match("^[A-Za-z '-]*$", $name)){
  // On prepare la requete d'insertion dans la table tblcategory
      $sql=("UPDATE tblauthors SET Status= :radio, AUthorName= :name WHERE id= :id");
      $query=$dbh->prepare($sql);
      $query->bindParam(':id',$id,PDO::PARAM_INT);
-     $query ->bindParam(':name',$name, PDO::PARAM_STR);
-     $query ->bindParam(':radio',$status, PDO::PARAM_INT);
+     $query->bindParam(':name',$name, PDO::PARAM_STR);
+     $query->bindParam(':radio',$status, PDO::PARAM_INT);
      $query-> execute();
+     $last_id=$query->lastInsertId();
      header('location:manage-authors.php');
  
  // On execute la requete

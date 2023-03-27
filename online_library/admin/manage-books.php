@@ -7,13 +7,17 @@ if (strlen($_SESSION['alogin']) == 0) {
       header('location:../adminlogin.php');
     } else {
   // On recupere l'identifiant de la catégorie a supprimer
-  $sql = "SELECT * FROM tblauthors";
+  $sql = "SELECT * FROM tblbooks tb
+  JOIN tblauthors ta ON ta.id=tb.AuthorID
+  JOIN tblcategory tc ON tc.id=tb.CatID";
   $query=$dbh->prepare($sql);
   $query->execute();}
+
+ 
   // On prepare la requete de suppression
   if(isset($_GET['edit'])){
       $id=$_GET['edit'];
-      $sql=("SELECT * FROM tblauthors Where id= :id");
+      $sql=("SELECT * FROM tblbooks Where id= :id");
       $query=$dbh->prepare($sql);
       $query->bindParam(':id',$id,PDO::PARAM_INT);
       $query-> execute();
@@ -22,7 +26,7 @@ if (strlen($_SESSION['alogin']) == 0) {
   // On execute la requete
   if(isset($_GET['del'])){
       $id=$_GET['del'];
-      $sql=("UPDATE tblauthors SET Status=0 WHERE id= :id");
+      $sql=("DELETE FROM tblbooks WHERE id= :id");
       $query=$dbh->prepare($sql);
       $query->bindParam(':id',$id,PDO::PARAM_INT);
       $query-> execute();
@@ -54,7 +58,7 @@ if (strlen($_SESSION['alogin']) == 0) {
     <tr>
         <th>#</th>
         <th>
-            Nom du lecteur
+            Nom du livre
         </th>
         <th>
             Catégorie
@@ -72,33 +76,35 @@ if (strlen($_SESSION['alogin']) == 0) {
             Action
         </th>
     </tr>
-    <?php while($result = $query->fetch(PDO::FETCH_ASSOC)){
-                    ?>
+    <?php while($result = $query->fetch()){?>
                 <tr>
                     <th>
-                       <?php echo($result['id']) ?>
+                       <?php echo($result['0']) ?>
                     </th>
                     <th>
-                    <?php echo($result['AuthorName'])  ?>
+                    <?php echo($result['BookName'])  ?>
                     </th>
                     <th>
-                    <?php echo($result['Status'])?>
+                    <?php echo($result['CategoryName'])?>
                     </th>
                     <th>
-                    <?php echo($result['creationDate']) ?>
+                    <?php echo($result['AuthorName']) ?>
                     </th>
                     <th>
-                    <?php echo($result['UpdationDate']) ?>
+                    <?php echo($result['ISBNNumber']) ?>
                     </th>
                     <th>
-                    <a href="edit-author.php?edit=<?php echo ($result['id']); ?>">
+                    <?php echo($result['BookPrice']) ?>€
+                    </th>
+                    <th>
+                    <a href="edit-book.php?edit=<?php echo ($result['0']); ?>">
                     <button type="submit" name="edit" class="btn btn-info">Editer</button></a>
-                    <a href="manage-authors.php?del=<?php echo ($result['id']); ?>">
+                    <a href="manage-books.php?del=<?php echo ($result['0']); ?>">
                     <button type="submit" name="del" class="btn btn-danger pull-right">Supprimer</button></a>
                 </th>
                 </tr>
                 <?php 
-                  } 
+                  }
  ?>
 
 <?php include('includes/footer.php');?>

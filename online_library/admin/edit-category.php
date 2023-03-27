@@ -23,6 +23,7 @@ if (strlen($_SESSION['alogin']) == 0) {
     $query ->bindParam(':name',$name, PDO::PARAM_STR);
     $query ->bindParam(':radio',$status, PDO::PARAM_INT);
     $query-> execute();
+    $last_id=$query->lastInsertId();
     header('location:manage-categories.php');
 
 // On execute la requete
