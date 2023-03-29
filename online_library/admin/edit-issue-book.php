@@ -12,20 +12,27 @@ if (strlen($_SESSION['alogin']) == 0) {
 
       $id = $_GET['edit'];
   // On recupere l'identifiant de la catégorie a supprimer
-  $sql = "SELECT * FROM tblissuedbookdetails ti
-  JOIN tblbooks tb ON ti.BookId=tb.id
-  JOIN tblreaders tr ON tr.ReaderId=ti.ReaderID
-  WHERE ti.id=:id";
-  $query=$dbh->prepare($sql);
-  $query ->bindParam(':id',$id, PDO::PARAM_INT);
-  $query->execute();
-  $result= $query->fetch(PDO::FETCH_ASSOC);
-  if (TRUE === isset($_POST['update'])){
-  if($result['ReturnSatus'] == 1){
-
-  }
-
-
+      $sql = "SELECT * FROM tblissuedbookdetails ti
+      JOIN tblbooks tb ON ti.BookId=tb.id
+      JOIN tblreaders tr ON tr.ReaderId=ti.ReaderID
+      WHERE ti.id=:id";
+      $query=$dbh->prepare($sql);
+      $query ->bindParam(':id',$id, PDO::PARAM_INT);
+      $query->execute();
+      $result= $query->fetch(PDO::FETCH_ASSOC);
+if (TRUE === isset($_POST['update'])){
+      $status=1;
+      $date=date('Y-m-d H:i:s');
+      $sql =("UPDATE tblissuedbookdetails
+      SET ReturnDate =:date, ReturnStatus=:status WHERE id= :id ");
+      $query = $dbh->prepare($sql);      
+      $query->bindParam(':id',$id, PDO::PARAM_INT);
+      $query->bindParam(':date',$date, PDO::PARAM_STR);
+      $query->bindParam(':status',$status, PDO::PARAM_INT);
+      
+      $query->execute();
+      $last_id=$dbh->lastInsertId();
+      header('location:manage-issued-books.php');
 }}
 ?>
 <!DOCTYPE html>

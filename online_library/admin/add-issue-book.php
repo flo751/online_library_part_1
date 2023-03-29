@@ -31,7 +31,7 @@ if (strlen($_SESSION['alogin']) == 0) {
     $query = $dbh -> prepare($sql);
     $query ->bindParam(':bookid',$bookid, PDO::PARAM_INT);
     $query ->bindParam(':readerid',$readerid, PDO::PARAM_STR);
-    $query ->bindParam(':returndate',$readerid, PDO::PARAM_INT);
+    $query ->bindParam(':returndate',$reterdate, PDO::PARAM_INT);
     $query ->bindParam(':isbn',$isbn, PDO::PARAM_INT);
     $query-> execute();
     $last_id = $dbh ->lastInsertId();

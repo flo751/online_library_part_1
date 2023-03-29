@@ -4,6 +4,43 @@ session_start();
 
 // On inclue le fichier de configuration et de connexion à la base de données
 include('includes/config.php');
+if (strlen($_SESSION['alogin']) == 0) {
+    // Si l'utilisateur est déconnecté
+    // L'utilisateur est renvoyé vers la page de login : index.php
+    header('location:../adminlogin.php');
+  } else {
+// On recupere l'identifiant de la catégorie a supprimer
+$sql = "SELECT * FROM tblreaders";
+$query=$dbh->prepare($sql);
+$query->execute();}
+// On prepare la requete de suppression
+if(isset($_GET['edit'])){
+    $id=$_GET['edit'];
+    
+    $sql=("UPDATE tblreaders SET Status=1 WHERE id= :id and Status= 0");
+    $query=$dbh->prepare($sql);
+    $query->bindParam(':id',$id,PDO::PARAM_INT);
+    $query-> execute();
+    $_SESSION['id']=$_GET['edit'];
+
+
+    
+    $sql=("UPDATE tblreaders SET Status=0 WHERE id= :id and Status= 1");
+    $query=$dbh->prepare($sql);
+    $query->bindParam(':id',$id,PDO::PARAM_INT);
+    $query-> execute();
+    $_SESSION['id']=$_GET['edit'];
+}
+// On execute la requete
+if(isset($_GET['del'])){
+    $id=$_GET['del'];
+    $sql=("UPDATE tblreaders SET Status=0 WHERE id= :id");
+    $query=$dbh->prepare($sql);
+    $query->bindParam(':id',$id,PDO::PARAM_INT);
+    $query-> execute();
+    header('location:reg-readers.php');
+
+}
 
 // Si l'utilisateur n'est logué ($_SESSION['alogin'] est vide)
 // On le redirige vers la page d'accueil
@@ -43,7 +80,75 @@ include('includes/config.php');
     <!--On inclue ici le menu de navigation includes/header.php-->
     <?php include('includes/header.php'); ?>
     <!-- Titre de la page (Gestion du Registre des lecteurs) -->
-
+    <h3>GESTION DES LIVRES </h3>
+    <!-- On prevoit ici une div pour l'affichage des erreurs ou du succes de l'operation de mise a jour ou de suppression d'une categorie-->
+    <table>
+    <tr>
+        <th>#</th>
+        <th>
+            ID Lecteur
+        </th>
+        <th>
+            Nom
+        </th>
+        <th>
+            Email
+        </th>
+        <th>
+            Portable
+        </th>
+        <th>
+            Date de reg
+        </th>
+        <th>
+            Status
+        </th>
+        <th>
+            Action
+        </th>
+    </tr>
+    <?php while($result = $query->fetch()){
+        if($result['Status'] ==1){
+            $result['Status']='actif';
+        }else if($result['Status']==0){
+            $result['Status']='inactif';
+        }else if($result['Status']==2){
+            $result['Status']='supprimé(e)';
+        }
+        ?>
+                <tr>
+                    <th>
+                       <?php echo($result['id']) ?>
+                    </th>
+                    <th>
+                    <?php echo($result['ReaderId'])  ?>
+                    </th>
+                    <th>
+                    <?php echo($result['FullName'])  ?>
+                    </th>
+                    <th>
+                    <?php echo($result['EmailId'])?>
+                    </th>
+                    <th>
+                    <?php echo($result['MobileNumber'])  ?>
+                    </th>
+                    <th>
+                    <?php echo($result['RegDate']) ?>
+                    </th>
+                    <th>
+                    <?php echo($result['Status']) ?>
+                    </th>
+                    <th>
+                    <a href="reg-readers.php?edit=<?php echo ($result['id']); ?>">
+                    <button type="submit" name="edit" class="btn btn-info">Editer</button></a>
+                    <a href="reg-readers.php?edit=<?php echo ($result['id']); ?>">
+                    <button type="submit" name="del" class="btn btn-info">Delet</button></a>
+                </th>
+                </tr>
+                <?php 
+                  }
+ ?>
+    </table>
     <!--On insère ici le tableau des lecteurs.
        On gère l'affichage des boutons Actif/Inactif/Supprimer en fonction de la valeur du statut du lecteur -->
 
