@@ -106,7 +106,7 @@ if (strlen($_SESSION['alogin']) == 0) {
                 <?php 
                   }
  ?>
-
+    </table>
 <?php include('includes/footer.php');?>
       <!-- FOOTER SECTION END-->
      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>

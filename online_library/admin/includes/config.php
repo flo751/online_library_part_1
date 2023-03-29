@@ -26,3 +26,4 @@ function validation($data) {
     //Convertit les caractères spéciaux en entités HTML
     $data = htmlspecialchars($data);
     return $data;}
+    ?>

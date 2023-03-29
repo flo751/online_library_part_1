@@ -4,19 +4,26 @@ require_once("includes/config.php");
 
 $isbn = $_GET['isbn'];
             
-
+error_log(print_r($_GET, 1));
 			
 			if($isbn){
-            $sql = "SELECT * FROM tblreaders WHERE ISBNNumber = :isbn";
+            $sql = "SELECT * FROM tblbooks WHERE ISBNNumber = :isbn";
             $query = $dbh -> prepare($sql);
-            $query->bindParam(":isbn" , $isbn, PDO::PARAM_STR);
+            $query->bindParam(":isbn" , $isbn, PDO::PARAM_INT);
 			$query->execute();
-            $result = $query->fetch();
+            $result = $query->fetch(PDO::FETCH_ASSOC);
+			error_log(print_r($result, 1));
+			error_log("TEST : ".empty($result));
 			if(empty($result)){
-				echo json_encode (['caca'=>'ISBN non valide'])
+				error_log("OK1");
+				echo json_encode(['caca'=>'ISBN non valide']);
 			}else{
-				echo json_encode(['caca' => $result['BookName']])
-			}}
+				error_log("OK2");
+				echo json_encode(['caca' => "{$result['BookName']}"]);
+			}}else{
+				error_log("OK3");
+				echo json_encode(['caca'=>'ISBN non disponible']);
+			}
 /* Cette fonction est declenchee au moyen d'un appel AJAX depuis le formulaire de sortie de livre */
 /* On recupere le numero ISBN du livre*/
 // On prepare la requete de recherche du livre correspondnat
