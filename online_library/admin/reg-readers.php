@@ -14,27 +14,31 @@ $sql = "SELECT * FROM tblreaders";
 $query=$dbh->prepare($sql);
 $query->execute();}
 // On prepare la requete de suppression
-if(isset($_GET['edit'])){
-    $id=$_GET['edit'];
-    
-    $sql=("UPDATE tblreaders SET Status=1 WHERE id= :id and Status= 0");
+if(isset($_GET['actif'])){
+    $id=$_GET['actif'];
+
+    $sql=("UPDATE tblreaders SET Status=1 WHERE id= :id");
     $query=$dbh->prepare($sql);
     $query->bindParam(':id',$id,PDO::PARAM_INT);
     $query-> execute();
-    $_SESSION['id']=$_GET['edit'];
+    header('location:reg-readers.php');
+
+}
+if(isset($_GET['inactif'])){
+    $id=$_GET['inactif'];
 
 
-    
-    $sql=("UPDATE tblreaders SET Status=0 WHERE id= :id and Status= 1");
+    $sql=("UPDATE tblreaders SET Status=0 WHERE id= :id");
     $query=$dbh->prepare($sql);
     $query->bindParam(':id',$id,PDO::PARAM_INT);
     $query-> execute();
-    $_SESSION['id']=$_GET['edit'];
+    header('location:reg-readers.php');
+
 }
 // On execute la requete
 if(isset($_GET['del'])){
     $id=$_GET['del'];
-    $sql=("UPDATE tblreaders SET Status=0 WHERE id= :id");
+    $sql=("UPDATE tblreaders SET Status=2 WHERE id= :id");
     $query=$dbh->prepare($sql);
     $query->bindParam(':id',$id,PDO::PARAM_INT);
     $query-> execute();
@@ -80,7 +84,7 @@ if(isset($_GET['del'])){
     <!--On inclue ici le menu de navigation includes/header.php-->
     <?php include('includes/header.php'); ?>
     <!-- Titre de la page (Gestion du Registre des lecteurs) -->
-    <h3>GESTION DES LIVRES </h3>
+    <h3>GESTION DES UTILISATEURS </h3>
     <!-- On prevoit ici une div pour l'affichage des erreurs ou du succes de l'operation de mise a jour ou de suppression d'une categorie-->
     <table>
     <tr>
@@ -139,10 +143,21 @@ if(isset($_GET['del'])){
                     <?php echo($result['Status']) ?>
                     </th>
                     <th>
-                    <a href="reg-readers.php?edit=<?php echo ($result['id']); ?>">
-                    <button type="submit" name="edit" class="btn btn-info">Editer</button></a>
-                    <a href="reg-readers.php?edit=<?php echo ($result['id']); ?>">
+                    <?php if($result['Status'] ==='actif'){?>
+                    <a href="reg-readers.php?inactif=<?php echo ($result['id']); ?>">
+                    <button type="submit" name="inactif" class="btn btn-info">inactif</button></a>
+                    <a href="reg-readers.php?del=<?php echo ($result['id']); ?>">
                     <button type="submit" name="del" class="btn btn-info">Delet</button></a>
+                    <?php } ?>
+                    <?php if($result['Status'] ==='inactif'){?>
+                    <a href="reg-readers.php?actif=<?php echo ($result['id']); ?>">
+                    <button type="submit" name="actif" class="btn btn-info">actif</button></a>
+                    <a href="reg-readers.php?del=<?php echo ($result['id']); ?>">
+                    <button type="submit" name="del" class="btn btn-info">Delet</button></a>
+                    <?php } ?>
+                    <?php if($result['Status'] ==='supprimé(e)'){?>
+                        <p>supprimé(e)</p>
+                        <?php } ?>
                 </th>
                 </tr>
                 <?php 
