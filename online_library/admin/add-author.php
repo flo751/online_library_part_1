@@ -10,8 +10,11 @@ if (strlen($_SESSION['alogin']) == 0) {
       if (TRUE === isset($_POST['alogin'])){ 
   // Sinon on peut continuer. Après soumission du formulaire de creation
   // On recupere le nom et le statut de la categorie
-      $name = $_POST['name'];
-      if(!preg_match("^[A-Za-z '-]*$", $name)){
+      $name = validation($_POST['name']);
+      if (!empty($name)
+      && strlen($name) <= 20
+      && preg_match("^[A-Za-z '-]+$^",$name)
+      ){
   // On prepare la requete d'insertion dans la table tblcategory
       $sql = "INSERT INTO tblauthors(AuthorName) VALUE(:name) ";
       $query = $dbh -> prepare($sql);
@@ -20,7 +23,6 @@ if (strlen($_SESSION['alogin']) == 0) {
       $last_id = $dbh ->lastInsertId();
       header('location:manage-authors.php');
   // On execute la requete
-      validation($last_id);
         }else{
           return false;
         }

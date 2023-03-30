@@ -18,23 +18,30 @@ $query=$dbh->prepare($sql);
 $query->execute();}
 // On prepare la requete de suppression
 if(isset($_GET['edit'])){
-    $id=$_GET['edit'];
+    $id=validation($_GET['edit']);
+
+    if (!empty($id)
+    && strlen($id) <= 3
+    ){
     $sql=("SELECT * FROM tblcategory Where id= :id");
     $query=$dbh->prepare($sql);
     $query->bindParam(':id',$id,PDO::PARAM_INT);
     $query-> execute();
     $_SESSION['id']=$_GET['edit'];
-}
+}}
 // On execute la requete
 if(isset($_GET['del'])){
-    $id=$_GET['del'];
+    $id=validation($_GET['del']);
+    if (!empty($id)
+      && strlen($id) <= 3
+      ){
     $sql=("UPDATE tblcategory SET Status=0 WHERE id= :id");
     $query=$dbh->prepare($sql);
     $query->bindParam(':id',$id,PDO::PARAM_INT);
     $query-> execute();
     header('location:manage-categories.php');
 
-}
+}}
 // On informe l'utilisateur du resultat de loperation
 // On redirige l'utilisateur vers la page manage-categories.php
     
@@ -107,9 +114,9 @@ if(isset($_GET['del'])){
                     <?php echo($result['UpdationDate']) ?>
                     </th>
                     <th>
-                    <a href="edit-authors.php?edit=<?php echo ($result['id']); ?>">
+                    <a href="edit-category.php?edit=<?php echo ($result['id']); ?>">
                     <button type="submit" name="edit" class="btn btn-info">Editer</button></a>
-                    <a href="manage-authors.php?del=<?php echo ($result['id']); ?>">
+                    <a href="manage-categories.php?del=<?php echo ($result['id']); ?>">
                     <button type="submit" name="del" class="btn btn-danger pull-right">Supprimer</button></a>
                 </th>
                 </tr>

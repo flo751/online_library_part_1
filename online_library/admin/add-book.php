@@ -24,12 +24,20 @@ if (strlen($_SESSION['alogin']) == 0) {
       
 // Sinon on peut continuer. Après soumission du formulaire de creation
 // On recupere le nom et le statut de la categorie
-    $name = $_POST['name'];
-    $categorie = $_POST['categorie'];
-    $auteur = $_POST['auteur'];
-    $ISBN = $_POST['ISBN'];
-    $prix = $_POST['prix'];
-    if(!preg_match("^[A-Za-z '-]*$", $name)){
+    $name = validation($_POST['name']);
+    $categorie = validation($_POST['categorie']);
+    $auteur = validation($_POST['auteur']);
+    $ISBN = validation($_POST['ISBN']);
+    $prix = validation($_POST['prix']);
+    if(!empty($name)
+    && strlen($name) <=20
+    && preg_match("^[A-Za-z '-]*$^", $name)
+    && !empty($ISBN)
+    && strlen($ISBN) <=6
+    && preg_match("^[A-Z0-9 '-]*$^", $ISBN)
+    && !empty($prix)
+    && strlen($prix) <=4
+    && preg_match("^[0-9 '-]*$^", $prix)){
 // On prepare la requete d'insertion dans la table tblcategory
     $sql = "INSERT INTO tblbooks(BookName, CatId, AuthorId, ISBNNumber, BookPrice) VALUE(:name, :categorie, :auteur, :isbn, :prix) ";
     $query = $dbh -> prepare($sql);
@@ -43,7 +51,7 @@ if (strlen($_SESSION['alogin']) == 0) {
     header('location:manage-books.php');
     
 // On execute la requete
-    validation($last_id);
+   
       }
 // On stocke dans $_SESSION le message correspondant au resultat de loperation
   }}
@@ -109,11 +117,11 @@ if (strlen($_SESSION['alogin']) == 0) {
                                 </div>
                                 <div class="form-group">
                                     <label>ISBN</label>
-                                    <input type="text" name="ISBN" required>
+                                    <input type="text" name="ISBN" require pattern="^[A-Z0-9'-]+$" >
                                 </div>
                                 <div class="form-group">
                                     <label>Prix</label>
-                                    <input type="text" name="prix" required>
+                                    <input type="text" name="prix" require pattern="^[0-9'-]+$">
                                 </div>
                                 <button type="submit" name="alogin" class="btn btn-info">Ajouter</button>
                             </form>

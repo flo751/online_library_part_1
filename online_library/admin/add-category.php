@@ -11,9 +11,14 @@ if (strlen($_SESSION['alogin']) == 0) {
     if (TRUE === isset($_POST['alogin'])){ 
 // Sinon on peut continuer. Après soumission du formulaire de creation
 // On recupere le nom et le statut de la categorie
-    $name = $_POST['name'];
-    $status = $_POST['radio'];
-    if(!preg_match("/^[A-Za-z '-]*$/", $name)){
+$name = validation($_POST['name']);
+$status = validation($_POST['radio']);
+$valid= array('0','1');
+if (!empty($name)
+&& strlen($name) <= 20
+&& preg_match("^[A-Za-z '-]+$^",$name)
+&& in_array($status, $valid)
+){
 // On prepare la requete d'insertion dans la table tblcategory
     $sql = "INSERT INTO tblcategory(CategoryName, Status) VALUE(:name, :radio) ";
     $query = $dbh -> prepare($sql);

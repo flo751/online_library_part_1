@@ -10,12 +10,17 @@ if (strlen($_SESSION['alogin']) == 0) {
 } else {
 // Sinon on peut continuer. Après soumission du formulaire de creation
 // On recupere le nom et le statut de la categorie
-    $id = $_GET['edit'];
+    $id = validation($_GET['edit']);
     
     if (isset($_POST['update'])){
-    if(!preg_match("^[A-Za-z '-]*$", $name)){
-        $name = $_POST['name'];
-    $status = $_POST['radio'];
+    $name = validation($_POST['name']);
+    $status = validation($_POST['radio']);
+    $valid= array('0','1');
+    if (!empty($name)
+    && strlen($name) <= 20
+    && preg_match("^[A-Za-z '-]+$^",$name)
+    && in_array($status, $valid)
+    ){
 // On prepare la requete d'insertion dans la table tblcategory
     $sql=("UPDATE tblcategory SET Status= :radio, CategoryName= :name WHERE id= :id");
     $query=$dbh->prepare($sql);
@@ -23,11 +28,10 @@ if (strlen($_SESSION['alogin']) == 0) {
     $query ->bindParam(':name',$name, PDO::PARAM_STR);
     $query ->bindParam(':radio',$status, PDO::PARAM_INT);
     $query-> execute();
-    $last_id=$query->lastInsertId();
+    $last_id = $dbh ->lastInsertId();
     header('location:manage-categories.php');
 
 // On execute la requete
-    validation($last_id);
       }else{
         return false;
       }

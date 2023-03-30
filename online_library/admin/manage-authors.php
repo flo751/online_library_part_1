@@ -13,23 +13,31 @@ if (strlen($_SESSION['alogin']) == 0) {
   $query->execute();}
   // On prepare la requete de suppression
   if(isset($_GET['edit'])){
-      $id=$_GET['edit'];
+      $id=validation($_GET['edit']);
+
+      if (!empty($id)
+      && strlen($id) <= 3
+      ){
       $sql=("SELECT * FROM tblauthors Where id= :id");
       $query=$dbh->prepare($sql);
       $query->bindParam(':id',$id,PDO::PARAM_INT);
       $query-> execute();
       $_SESSION['id']=$_GET['edit'];
-  }
+  }}
   // On execute la requete
   if(isset($_GET['del'])){
-      $id=$_GET['del'];
+      $id=validation($_GET['del']);
+
+      if (!empty($id)
+      && strlen($id) <= 3
+      ){
       $sql=("UPDATE tblauthors SET Status=0 WHERE id= :id");
       $query=$dbh->prepare($sql);
       $query->bindParam(':id',$id,PDO::PARAM_INT);
       $query-> execute();
       header('location:manage-authors.php');
   
-  }
+  }}
 ?>
 
 <!DOCTYPE html>
