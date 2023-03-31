@@ -9,8 +9,14 @@ if (strlen($_SESSION['alogin']) == 0) {
   } else {
 
     if (TRUE === isset($_POST['add'])){ 
-
-        $isbn = $_POST['isbn'];
+        $readerid = validation($_POST['readerid']);
+        $isbn = validation($_POST['isbn']);
+        if(!empty($readerid)
+    && strlen($readerid) <=20
+    && preg_match("^[A-Za-z0-9 '-]*$^", $readerid)
+    && !empty($isbn)
+    && strlen($isbn) <=6
+    && preg_match("^[A-Z0-9 '-]*$^", $isbn)){
     $sql = "SELECT * FROM tblbooks WHERE ISBNNUmber=:isbn";
       $query = $dbh->prepare($sql);
       $query ->bindParam(':isbn',$isbn, PDO::PARAM_INT);
@@ -24,7 +30,7 @@ if (strlen($_SESSION['alogin']) == 0) {
       
 // Sinon on peut continuer. Après soumission du formulaire de creation
 // On recupere le nom et le statut de la categorie
-    $readerid = $_POST['readerid'];
+    
     $returndate = NULL;
 // On prepare la requete d'insertion dans la table tblcategory
     $sql = "INSERT INTO tblissuedbookdetails(BookId, ReaderId,ReturnDate, ReturnStatus) VALUE(:bookid, :readerid, :returndate, :isbn) ";
@@ -39,7 +45,7 @@ if (strlen($_SESSION['alogin']) == 0) {
     
 // On execute la requete
 // On stocke dans $_SESSION le message correspondant au resultat de loperation
-  }}
+  }}}
 ?>
 <!DOCTYPE html>
 <html lang="FR">
@@ -73,12 +79,12 @@ if (strlen($_SESSION['alogin']) == 0) {
 				<form method="post">
                 <div class="form-group">
 						<label>Identifiant lecteur</label><br>
-						<input type="text" name="readerid" id="readerid" onblur="get_reader(readerid)" required>
+						<input type="text" name="readerid" id="readerid" onblur="get_reader(readerid)" require pattern="^[A-Za-z0-9 '-]+$" required>
                         <span id="answer"></span>
 					</div>
                     <div class="form-group">
 						<label>ISBN</label><br>
-						<input type="text" name="isbn" id="isbn" onblur="get_book(isbn)" required>
+						<input type="text" name="isbn" id="isbn" onblur="get_book(isbn)" require pattern="^[0-9 '-]+$" required>
                         <span id="answer1"></span>
 					</div>
                     <button type="submit" name="add" id="add" class="btn btn-info">Ajouter</button>&nbsp;&nbsp;&nbsp;

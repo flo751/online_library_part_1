@@ -17,12 +17,13 @@ $query->execute();}
 
 // On prepare la requete de suppression
 if(isset($_GET['edit'])){
-    $id=$_GET['edit'];
+    $id=validation($_GET['edit']);
+    $_SESSION['id']=validation($_GET['edit']);
     $sql=("SELECT * FROM tbltblissuedbookdetails Where id= :id");
     $query=$dbh->prepare($sql);
     $query->bindParam(':id',$id,PDO::PARAM_INT);
     $query-> execute();
-    $_SESSION['id']=$_GET['edit'];
+    
 }
 ?>
 <!DOCTYPE html>

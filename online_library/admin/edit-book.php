@@ -8,7 +8,7 @@ if (strlen($_SESSION['alogin']) == 0) {
       header('location:../adminlogin.php');
     } else {
 
-      $id = $_GET['edit'];
+      $id = validation($_GET['edit']);
       
 
       $sql = "SELECT * FROM tblauthors";
@@ -23,11 +23,20 @@ if (strlen($_SESSION['alogin']) == 0) {
       if (TRUE === isset($_POST['alogin'])){ 
 
 
-      $name = $_POST['name'];
-      $categorie = $_POST['categorie'];
-      $auteur = $_POST['auteur'];
-      $ISBN = $_POST['ISBN'];
-      $prix = $_POST['prix'];
+        $name = validation($_POST['name']);
+        $categorie = validation($_POST['categorie']);
+        $auteur = validation($_POST['auteur']);
+        $ISBN = validation($_POST['ISBN']);
+        $prix = validation($_POST['prix']);
+        if(!empty($name)
+        && strlen($name) <=20
+        && preg_match("^[A-Za-z '-]*$^", $name)
+        && !empty($ISBN)
+        && strlen($ISBN) <=7
+        && preg_match("^[0-9 '-]*$^", $ISBN)
+        && !empty($prix)
+        && strlen($prix) <=4
+        && preg_match("^[0-9 '-]*$^", $prix)){
   // On prepare la requete d'insertion dans la table tblcategory
       $sql =("UPDATE tblbooks
       SET BookName= :name, CatId= :categorie, AuthorId= :auteur, ISBNNumber= :isbn, BookPrice= :prix WHERE id= :id ");
@@ -45,7 +54,7 @@ if (strlen($_SESSION['alogin']) == 0) {
   // On execute la requete
       validation($last_id);
   // On stocke dans $_SESSION le message correspondant au resultat de loperation
-    }}
+    }}}
 ?>
 
 <!DOCTYPE html>
@@ -111,11 +120,11 @@ if (strlen($_SESSION['alogin']) == 0) {
                                 </div>
                                 <div class="form-group">
                                     <label>ISBN</label>
-                                    <input type="number" name="ISBN"required>
+                                    <input type="number" name="ISBN" require pattern="^[0-9 '-]+$" required>
                                 </div>
                                 <div class="form-group">
                                     <label>Prix</label>
-                                    <input type="number" name="prix" required>
+                                    <input type="number" name="prix"  require pattern="^[0-9 '-]*$" required>
                                 </div>
                                 <button type="submit" name="alogin" class="btn btn-info">Ajouter</button>
                             </form>

@@ -10,7 +10,7 @@ if (strlen($_SESSION['alogin']) == 0) {
       header('location:../adminlogin.php');
     } else {
 
-      $id = $_GET['edit'];
+      $id = validation($_GET['edit']);
   // On recupere l'identifiant de la catégorie a supprimer
       $sql = "SELECT * FROM tblissuedbookdetails ti
       JOIN tblbooks tb ON ti.BookId=tb.id

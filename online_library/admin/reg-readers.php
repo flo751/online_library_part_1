@@ -15,7 +15,7 @@ $query=$dbh->prepare($sql);
 $query->execute();}
 // On prepare la requete de suppression
 if(isset($_GET['actif'])){
-    $id=$_GET['actif'];
+    $id=validation($_GET['actif']);
 
     $sql=("UPDATE tblreaders SET Status=1 WHERE id= :id");
     $query=$dbh->prepare($sql);
@@ -25,7 +25,7 @@ if(isset($_GET['actif'])){
 
 }
 if(isset($_GET['inactif'])){
-    $id=$_GET['inactif'];
+    $id=validation($_GET['inactif']);
 
 
     $sql=("UPDATE tblreaders SET Status=0 WHERE id= :id");
@@ -37,7 +37,7 @@ if(isset($_GET['inactif'])){
 }
 // On execute la requete
 if(isset($_GET['del'])){
-    $id=$_GET['del'];
+    $id=validation($_GET['del']);
     $sql=("UPDATE tblreaders SET Status=2 WHERE id= :id");
     $query=$dbh->prepare($sql);
     $query->bindParam(':id',$id,PDO::PARAM_INT);

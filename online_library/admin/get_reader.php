@@ -3,7 +3,7 @@
 /* On recupere le numero l'identifiant du lecteur SID---*/
 require_once("includes/config.php");
 
-$sid = $_GET['readerid'];
+$sid = validation($_GET['readerid']);
             
 
 			// On prepare la requete de recherche du lecteur correspondnat
