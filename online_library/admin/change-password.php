@@ -16,7 +16,12 @@ if(strlen($_SESSION['alogin'])==0) {
         $query->execute();
         $result= $query->fetch(PDO::FETCH_OBJ);
 
-    if(!empty($result) && password_verify($_POST['OldPassword'], $result->Password)){
+
+    if(!empty($result) 
+	&& password_hash($_POST['OldPassword'],PASSWORD_DEFAULT) 
+	&& !empty($_POST['OldPassword']) 
+	&& password_verify($_POST['OldPassword'], $result->Password)
+	&&!empty($_POST['Password'])){
         $newmdp = validation($_POST['Password']);
         $newpassword = password_hash($newmdp, PASSWORD_DEFAULT);
         $sql = "UPDATE admin SET Password=:Password WHERE FullName=:name";
